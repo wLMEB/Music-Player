@@ -1,0 +1,487 @@
+.cpu 6502
+
+PortADR		equ	$1700
+PortADDR 		equ	$1701
+PortBDR		equ	$1702
+PortBDDR		equ	$1703
+PortA2DR		equ	$1740
+PortA2DDR		equ	$1741
+BobsPort		equ	$4000
+GETKEY		equ	$1f6a
+Temp			equ	$00
+
+.org $0200
+
+
+; PortA: Reset, BDIR, BC1 ; PortB: D0-D7
+
+Init:
+        lda #$ff    ;set PortA to be output
+        sta PortADDR
+		lda #$ff    ;set PortB to be output
+        sta PortBDDR
+        lda #$00
+		sta PortBDR
+		lda #$04   ; Set reset to high
+        sta PortADR
+        jsr delay
+		lda #$00   ;set reset to low
+		sta PortADR 
+		jsr delay
+        lda #$04   ; Set reset to high
+        sta PortADR
+        
+        
+        lda #$07    ; Chanel A
+        sta PortADR ; Latch Addresss
+        jsr delay
+        lda #$07
+        sta PortBDR ; R7
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$3E
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+;
+;
+        lda #$07    ; Amplitude
+        sta PortADR ; Latch Addresss
+        lda #$08
+        sta PortBDR ; R8
+        lda #$04
+        sta PortADR ; Inactive
+        lda #$07
+        sta PortBDR ; Write Data
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        ;
+;
+
+Play:   jsr Long_delay
+        jsr Mary
+        jsr Long_delay
+        jsr Long_delay
+        jsr Long_delay
+        jsr Star
+        jsr Long_delay
+        jsr Long_delay
+        jsr Long_delay
+        jmp Play
+Mary:
+        jsr Note_E
+        jsr Note_D
+        jsr Note_C
+        jsr Note_D
+        jsr Note_E
+        jsr Long_delay
+        jsr Long_delay
+        jsr Note_0
+        jsr Note_D
+        jsr Long_delay
+        jsr Long_delay
+        jsr Note_0
+        jsr Note_E
+        jsr Note_G
+        jsr Note_G
+        jsr Note_0
+        
+        jsr Note_E
+        jsr Note_D
+        jsr Note_C
+        jsr Note_D
+        jsr Note_E
+        jsr Long_delay
+        jsr Long_delay
+        jsr Note_C
+        jsr Note_D
+        jsr Long_delay
+        jsr Note_E
+        jsr Note_D
+        jsr Note_C
+        jsr Long_delay
+        jsr Note_0
+        jsr Note_0
+        jsr Note_0
+        rts 
+        
+        
+        
+Star:
+       jsr Note_C
+       jsr Long_delay
+       jsr Note_G
+       jsr Long_delay
+       jsr Note_A
+       jsr Long_delay
+       jsr Note_G
+       jsr Note_0
+       
+       jsr Note_F
+       jsr Long_delay
+       jsr Note_E
+       jsr Long_delay
+       jsr Note_D
+       jsr Long_delay
+       jsr Note_C
+       jsr Note_0
+       
+       jsr Note_G
+       jsr Long_delay
+       jsr Note_F
+       jsr Long_delay
+       jsr Note_E
+       jsr Long_delay
+       jsr Note_D
+       jsr Note_0
+       
+       jsr Note_G
+       jsr Long_delay
+       jsr Note_F
+       jsr Long_delay
+       jsr Note_E
+       jsr Long_delay
+       jsr Note_D
+       jsr Note_0
+       
+       jsr Note_C
+       jsr Long_delay
+       jsr Note_G
+       jsr Long_delay
+       jsr Note_A
+       jsr Long_delay
+       jsr Note_G
+       jsr Note_0
+       
+       jsr Note_F
+       jsr Long_delay
+       jsr Note_E
+       jsr Long_delay
+       jsr Note_D
+       jsr Long_delay
+       jsr Note_C
+       jsr Note_0
+       rts
+Note_0:
+
+        lda #$07
+        sta PortADR ; Latch Addresss ; C
+        jsr delay
+        lda #$00
+        sta PortBDR ; R0
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$00
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        
+;
+;
+        lda #$07
+        sta PortADR ; Latch Addresss
+        jsr delay
+        lda #$01
+        sta PortBDR ; R1
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$00
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr long_delay
+        rts
+        
+        
+Note_C:
+
+        lda #$07
+        sta PortADR ; Latch Addresss ; C
+        jsr delay
+        lda #$00
+        sta PortBDR ; R0
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$EF
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        
+;
+;
+        lda #$07
+        sta PortADR ; Latch Addresss
+        jsr delay
+        lda #$01
+        sta PortBDR ; R1
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$00
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr long_delay
+        rts
+;
+Note_D:
+        lda #$07
+        sta PortADR ; Latch Addresss ;
+        jsr delay
+        lda #$00
+        sta PortBDR ; R0
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$D5
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        
+;
+;
+        lda #$07
+        sta PortADR ; Latch Addresss
+        jsr delay
+        lda #$01
+        sta PortBDR ; R1
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$00
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr long_delay
+        rts
+     
+Note_E:
+        lda #$07
+        sta PortADR ; Latch Addresss ;
+        jsr delay
+        lda #$00
+        sta PortBDR ; R0
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$BE
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        
+;
+;
+        lda #$07
+        sta PortADR ; Latch Addresss
+        jsr delay
+        lda #$01
+        sta PortBDR ; R1
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$00
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr long_delay
+        rts
+        
+Note_F:
+        lda #$07
+        sta PortADR ; Latch Addresss ;
+        jsr delay
+        lda #$00
+        sta PortBDR ; R0
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$B3
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        
+;
+;
+        lda #$07
+        sta PortADR ; Latch Addresss
+        jsr delay
+        lda #$01
+        sta PortBDR ; R1
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$00
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr long_delay
+        rts        
+Note_A:
+        lda #$07
+        sta PortADR ; Latch Addresss ;
+        jsr delay
+        lda #$00
+        sta PortBDR ; R0
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$8E
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        
+;
+;
+        lda #$07
+        sta PortADR ; Latch Addresss
+        jsr delay
+        lda #$01
+        sta PortBDR ; R1
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$00
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr long_delay
+        rts
+        
+        Note_G:
+        lda #$07
+        sta PortADR ; Latch Addresss ;
+        jsr delay
+        lda #$00
+        sta PortBDR ; R0
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$9F
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        
+;
+;
+        lda #$07
+        sta PortADR ; Latch Addresss
+        jsr delay
+        lda #$01
+        sta PortBDR ; R1
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr delay
+        lda #$00
+        sta PortBDR ; Write Data
+        jsr delay
+        lda #$06
+        sta PortADR ; Write Data mode
+        jsr delay
+        lda #$04
+        sta PortADR ; Inactive
+        jsr long_delay
+        rts
+delay:
+ 
+        ldx  #$FF   ; (2 cycles)
+delay_loop:
+
+        dex          ; (2 cycles)
+        bne  delay_loop   ; (3 cycles in loop, 2 cycles at end)
+        rts
+        
+        
+Long_delay:
+        ldy #$FF
+LD: 
+        jsr delay
+        dey
+        bne LD
+        rts
